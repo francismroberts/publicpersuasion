@@ -26,6 +26,7 @@
       3: { title: 'Meaning & Audiences, Credibility & Color',         range: 'Aug 9 – Aug 15'  },
       4: { title: 'Moving People to Action with Logic & Emotion',     range: 'Aug 16 – Aug 22' },
       5: { title: 'Tips on Prepared Speech Delivery',                 range: 'Aug 23 – Aug 29' },
+      6: { title: 'Finish Strong',                                   range: 'Aug 24 – Aug 27' },
     },
 
     items: [
@@ -257,6 +258,131 @@
         url:CANVAS+'discussion_topics/1855997', due:'2026-08-27', dueType:'recommended', required:false, note:'Optional · ungraded',
         capture:'Optional peer sharing',
         date:'2026-08-27', whyOrder:'Purely optional — share your Arc Studio recording with classmates if you\u2019d like, no grading impact.', effort:5, mode:'flex' },
+
+      /* ── FINISH PLAN (week 6) ─────────────────────── (17 new · 8 shared) ──
+         These are execution steps for the final four days, NOT syllabus items.
+         They are surfaced by finish.html via COURSE.plan below, which also
+         reuses eight existing Week 4/5 items by id so state stays shared.     */
+      { id:'w6-m4',    week:6, type:'task',    material:'Monday, Aug 24',      label:'12-minute timed write — no editing, no backspacing',
+        url:'', due:'2026-08-24', dueType:'deadline', required:true, note:OWN,
+        capture:'Raw material, not decisions',
+        date:'2026-08-24', whyOrder:'The Levy method from Week 2. Placed after the lectures so you start with input rather than a blank page.', effort:12, mode:'desk' },
+      { id:'w6-m5',    week:6, type:'task',    material:'Monday, Aug 24',      label:'Write one sentence: "I want to persuade ___ that ___"',
+        url:'', due:'2026-08-24', dueType:'deadline', required:true, note:OWN,
+        capture:'Topic + named audience',
+        date:'2026-08-24', whyOrder:'The only Monday deliverable. Everything Tuesday depends on this sentence existing.', effort:3, mode:'desk' },
+
+      { id:'w6-t1',    week:6, type:'task',    material:'Tuesday, Aug 25',     label:'Cook Ch. 4 — persuasive-structure section only',
+        url:'https://drive.google.com/file/d/1pd8_ctuicoDk5J2Yw4bkQgHOCNgrBKRs/view?usp=drive_link', due:'2026-08-25', dueType:'deadline', required:true,
+        note:'Partial read of the material in w3-r1 (Cook, Ch. 1–5) — the Ch. 4 structure section only, tracked separately.',
+        capture:"Problem/solution + Monroe's Motivated Sequence + indirect proof",
+        date:'2026-08-25', whyOrder:'Gives you a skeleton to draft into instead of inventing structure mid-draft.', effort:15, mode:'desk' },
+      { id:'w6-t3',    week:6, type:'task',    material:'Tuesday, Aug 25',     label:"Re-skim Week 2 Packet — DeSanto's own handouts",
+        url:'https://drive.google.com/file/d/1ZIxB-drC0SESuQAf2K13UhZ1XuZyBHFT/view?usp=drive_link', due:'2026-08-25', dueType:'deadline', required:true,
+        note:'Already completed as w3-r3 / w3-r4; this is a re-skim, tracked separately.',
+        capture:'Roadmap and sign-posting + conversational word swaps',
+        date:'2026-08-25', whyOrder:'His structural checklist in his own words — faster to reload than to rederive.', effort:10, mode:'desk' },
+      { id:'w6-t4',    week:6, type:'task',    material:'Tuesday, Aug 25',     label:'Pick your structure — Monroe, problem/solution, or indirect proof',
+        url:'', due:'2026-08-25', dueType:'deadline', required:true, note:OWN,
+        capture:'One choice, written down',
+        date:'2026-08-25', whyOrder:'Deciding structure mid-draft turns a two-hour draft into a five-hour one.', effort:5, mode:'flex' },
+      { id:'w6-t5',    week:6, type:'task',    material:'Tuesday, Aug 25',     label:'Draft start to finish — one pass, no editing',
+        url:'', due:'2026-08-25', dueType:'deadline', required:true, note:OWN,
+        capture:'700–850 words, complete, allowed to be bad',
+        date:'2026-08-25', whyOrder:'A finished bad draft today beats a perfect first paragraph tomorrow.', effort:120, mode:'desk' },
+
+      { id:'w6-w1',    week:6, type:'task',    material:'Wednesday, Aug 26',   label:'Read the whole draft aloud with a stopwatch',
+        url:'', due:'2026-08-26', dueType:'deadline', required:true, note:OWN,
+        capture:'Actual runtime, before you touch a word',
+        date:'2026-08-26', whyOrder:'Timing tells you what to cut more reliably than judgment does.', effort:10, mode:'move' },
+      { id:'w6-w2',    week:6, type:'task',    material:'Wednesday, Aug 26',   label:'Cut to time — whole ideas, not adjectives',
+        url:'', due:'2026-08-26', dueType:'deadline', required:true, note:OWN,
+        capture:'Target 5:15–5:45',
+        date:'2026-08-26', whyOrder:'5–6 minutes confirmed by DeSanto at the Aug 24 live session.', effort:30, mode:'desk' },
+      { id:'w6-w4',    week:6, type:'task',    material:'Wednesday, Aug 26',   label:'Read aloud again — fix every stumble',
+        url:'', due:'2026-08-26', dueType:'deadline', required:true, note:OWN,
+        capture:'Anything hard to say gets rewritten',
+        date:'2026-08-26', whyOrder:'Written-sounding sentences are the most common thing that wrecks a delivery.', effort:10, mode:'move' },
+      { id:'w6-w6',    week:6, type:'task',    material:'Wednesday, Aug 26',   label:'Print the script in Cook Ch. 6 format',
+        url:'', due:'2026-08-26', dueType:'deadline', required:true, note:OWN,
+        capture:'Large type + top two-thirds only + complete sentence per page',
+        date:'2026-08-26', whyOrder:'Keeps your chin from dropping mid-sentence on camera.', effort:15, mode:'desk' },
+
+      { id:'w6-h2',    week:6, type:'task',    material:'Thursday, Aug 27',    label:'Mark up the printed script',
+        url:'', due:'2026-08-27', dueType:'deadline', required:true, note:OWN,
+        capture:'Underline emphasis + mark pauses + note eye-contact points',
+        date:'2026-08-27', whyOrder:'Never deliver a blank text hot off the printer.', effort:20, mode:'desk' },
+      { id:'w6-h3',    week:6, type:'task',    material:'Thursday, Aug 27',    label:'Rehearse in thirds',
+        url:'', due:'2026-08-27', dueType:'deadline', required:true, note:OWN,
+        capture:'What am I communicating here, and what delivery does that?',
+        date:'2026-08-27', whyOrder:'Section-by-section beats full run-throughs for fixing specific problems.', effort:30, mode:'move' },
+      { id:'w6-h4',    week:6, type:'task',    material:'Thursday, Aug 27',    label:'Memorize the first 15 seconds and the last 15 seconds',
+        url:'', due:'2026-08-27', dueType:'deadline', required:true, note:OWN,
+        capture:'Open under duress + always exit gracefully',
+        date:'2026-08-27', whyOrder:"Cook's rule — the opening is hardest and the close is what they remember.", effort:10, mode:'move' },
+      { id:'w6-h5',    week:6, type:'task',    material:'Thursday, Aug 27',    label:'Set up — camera at eye level, lighting and audio test',
+        url:'', due:'2026-08-27', dueType:'deadline', required:true, note:OWN,
+        capture:'15-second test clip before the real take',
+        date:'2026-08-27', whyOrder:'Discovering bad audio after take three is the worst possible time.', effort:10, mode:'flex' },
+      { id:'w6-h6',    week:6, type:'task',    material:'Thursday, Aug 27',    label:'Record — three takes maximum',
+        url:'', due:'2026-08-27', dueType:'deadline', required:true, note:OWN,
+        capture:"State your audience's identity before you begin speaking",
+        date:'2026-08-27', whyOrder:'Required by the assignment. Take three ships regardless.', effort:30, mode:'move' },
+      { id:'w6-h7',    week:6, type:'task',    material:'Thursday, Aug 27',    label:'Watch your own take back against the delivery criteria',
+        url:'', due:'2026-08-27', dueType:'deadline', required:true, note:OWN,
+        capture:'Tone, pace, pauses, eye contact, gestures',
+        date:'2026-08-27', whyOrder:'This rep only exists this week and never again.', effort:15, mode:'flex' },
+      { id:'w6-h9',    week:6, type:'task',    material:'Thursday, Aug 27',    label:'20-minute debrief — what was hard and why',
+        url:'', due:'2026-08-27', dueType:'deadline', required:true, note:OWN,
+        capture:"One page, unpolished, written while it's raw",
+        date:'2026-08-27', whyOrder:'Makes every post-course reading answer a question you actually have.', effort:20, mode:'desk' },
+    ],
+
+    /* ── FINISH PLAN ─────────────────────────────────────────────────────────
+       Ordered day-by-day execution list rendered by finish.html (week 6).
+       Each entry is an `id` into COURSE.items above — existing Week 4/5 ids are
+       reused deliberately so checking a step on finish.html checks it on that
+       week's page too (one Supabase row, one source of truth).
+       `whyOrder` here is an OPTIONAL per-plan override, used only where a shared
+       item's own whyOrder was written for its original week and reads wrong in
+       this day sequence. dashboard.js merges it onto a COPY — it never mutates
+       the object in COURSE.items, so the week pages keep their own wording.
+       Each day's `date` is applied to its steps as the "Best timing" value and
+       is what the checklist's by-date grouping keys on.                        */
+    plan: [
+      { day: 'Monday, Aug 24', date: '2026-08-24', entries: [
+        { id:'w5-lec1', whyOrder:"Zero prerequisites — you don't need a topic to watch this, which makes it the lowest-friction way to start." },
+        { id:'w5-lec2', whyOrder:"Continues Part 1, and it's the most direct reassurance in the course about nerves." },
+        { id:'w5-lec3', whyOrder:"Covers marking up a script, which gives Thursday's markup step its rationale before you've written anything." },
+        { id:'w6-m4' },
+        { id:'w6-m5' },
+      ]},
+      { day: 'Tuesday, Aug 25', date: '2026-08-25', entries: [
+        { id:'w6-t1' },
+        { id:'w4-r1',  whyOrder:'The only assigned text no lecture ever references — verified across all sixteen transcripts. Highest-value unread material you have, and checking it here also clears it from your Week 4 backlog.' },
+        { id:'w6-t3' },
+        { id:'w6-t4' },
+        { id:'w6-t5' },
+      ]},
+      { day: 'Wednesday, Aug 26', date: '2026-08-26', entries: [
+        { id:'w6-w1' },
+        { id:'w6-w2' },
+        { id:'w4-r9',  whyOrder:'Use it as a revision tool, not a read — swap flat words while the structure is already fixed. Also clears a Week 4 backlog item.' },
+        { id:'w6-w4' },
+        { id:'w5-asg1', whyOrder:'Submit by 2:00 p.m. PT. The real deadline is 3:00 p.m. PT / 5:00 p.m. CT — the hour of buffer is non-negotiable.' },
+        { id:'w6-w6' },
+      ]},
+      { day: 'Thursday, Aug 27', date: '2026-08-27', entries: [
+        { id:'w5-r1',  whyOrder:'Read before you rehearse, not after — it changes how you rehearse.' },
+        { id:'w6-h2' },
+        { id:'w6-h3' },
+        { id:'w6-h4' },
+        { id:'w6-h5' },
+        { id:'w6-h6' },
+        { id:'w6-h7' },
+        { id:'w5-asg2', whyOrder:'Submit by 2:00 p.m. PT. Confirm processing finished before closing the tab.' },
+        { id:'w6-h9' },
+      ]},
     ],
   };
 })();

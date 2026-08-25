@@ -270,6 +270,8 @@ a.pin-card:hover { transform:translateY(-1px); box-shadow:var(--shadow-md); text
 .pin-real { font-size:11.5px; color:var(--ink2); margin-top:3px; }
 .pin-links { display:flex; gap:12px; margin-top:9px; }
 .pin-links a { font-size:12px; font-weight:700; color:var(--accent-deep); }
+.pin-finish { margin-bottom:12px; }
+.pin-finish.current { box-shadow:0 0 0 1px var(--accent); }
 
 /* ── Phase 2 narrative content ──────────────────────────────────────────── */
 .approach-body { padding:20px 22px 22px; }
