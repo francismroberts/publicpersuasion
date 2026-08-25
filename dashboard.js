@@ -23,7 +23,7 @@
   const lsSet = (k, v) => { try { localStorage.setItem(LS + k, v); } catch (e) {} };
 
   // ── Page memory: remember the last page visited, so index.html can return here ──
-  const PAGES = ['week1.html', 'week2.html', 'week3.html', 'week4.html', 'week5.html'];
+  const PAGES = ['week1.html', 'week2.html', 'week3.html', 'week4.html', 'week5.html', 'finish.html'];
   (function rememberThisPage() {
     const here = location.pathname.split('/').pop() || 'index.html';
     if (here === 'index.html' || PAGES.includes(here)) lsSet('lastPage', here);
@@ -82,12 +82,15 @@
     const pctEl = $('#' + pctId); if (pctEl) pctEl.style.color = color;
   }
 
-  const TYPE_EMOJI = { live: '💬', reading: '📖', lecture: '🎥', speech: '🎤', resource: '📄', assignment: '✏️' };
+  const TYPE_EMOJI = { live: '💬', reading: '📖', lecture: '🎥', speech: '🎤', resource: '📄', assignment: '✏️', task: '✅' };
   const MODE = { desk: { e: '🖥️', c: 'mode-desk', t: 'Desk work' }, move: { e: '🏎️', c: 'mode-move', t: 'Move-friendly' }, flex: { e: '🔁', c: 'mode-flex', t: 'Flexible' } };
   const GROUP_MODES = ['type', 'date', 'effort', 'material', 'none'];
   const GROUP_LABELS = { type: 'By type', date: 'By date', effort: 'By effort', material: 'By material', none: 'None' };
-  const TYPE_ORDER = ['live', 'reading', 'lecture', 'speech', 'resource', 'assignment'];
-  const TYPE_HEAD = { live: 'Live sessions', reading: 'Readings', lecture: 'Lectures', speech: 'Speeches', resource: 'Resources', assignment: 'Assignments' };
+  const TYPE_ORDER = ['live', 'reading', 'lecture', 'speech', 'resource', 'assignment', 'task'];
+  const TYPE_HEAD = { live: 'Live sessions', reading: 'Readings', lecture: 'Lectures', speech: 'Speeches', resource: 'Resources', assignment: 'Assignments', task: 'Steps' };
+  // The Finish Plan page (finish.html) is not a syllabus week — it renders COURSE.plan,
+  // an ordered list that reuses existing Week 4/5 items by id alongside its own w6- steps.
+  const PLAN_WEEK = 6;
   const ZONE_LABEL = { briefing: 'Briefing', execution: 'Execution', reference: 'Reference' };
   const SUB = 'Northwestern · MSC 482 · Prof. Jason DeSanto';
 
@@ -100,7 +103,13 @@
     const w = document.body.dataset.week;
     if (!w) return;
     WEEK = Number(w);
-    ITEMS = window.COURSE.items.filter(i => i.week === WEEK);
+    if (WEEK === PLAN_WEEK) {
+      ITEMS = planItems();
+      const dateMode = GROUP_MODES.indexOf('date');
+      if (dateMode !== -1) groupIdx = dateMode;   // the plan reads as a day-by-day list, not by type
+    } else {
+      ITEMS = window.COURSE.items.filter(i => i.week === WEEK);
+    }
     ITEMS.forEach((i, n) => SEQ[i.id] = n + 1);
     pruneEmptySections();
     buildChrome();
@@ -111,10 +120,27 @@
     subscribeRealtime();
   });
 
+  // Resolve COURSE.plan against COURSE.items, in plan order. Returns COPIES: a per-entry
+  // override (e.g. whyOrder) must never leak back onto the shared object the week pages read.
+  function planItems() {
+    const out = [];
+    (window.COURSE.plan || []).forEach(group => {
+      (group.entries || []).forEach(entry => {
+        const base = window.COURSE.items.find(i => i.id === entry.id);
+        if (!base) { console.error('dashboard.js: COURSE.plan references unknown item id \u201c' + entry.id + '\u201d \u2014 step not rendered.'); return; }
+        const copy = Object.assign({}, base, entry);
+        copy.date = group.date;   // the plan's day is this step's "Best timing" and its grouping key
+        out.push(copy);
+      });
+    });
+    return out;
+  }
+
   /* ── Chrome ─────────────────────────────────────────────────────────────── */
   function weekOptions() {
     let o = '<option value="index.html">🏠 Home</option>';
     for (let n = 1; n <= 5; n++) o += '<option value="week' + n + '.html"' + (n === WEEK ? ' selected' : '') + '>Week ' + n + '</option>';
+    o += '<option value="finish.html"' + (WEEK === PLAN_WEEK ? ' selected' : '') + '>\ud83c\udfc1 Finish Plan</option>';
     return o;
   }
   function sections() { return $$('.section-card').map(s => ({ id: s.id, zone: s.dataset.zone, icon: s.dataset.icon || '•', nav: s.dataset.nav || s.id })); }
@@ -148,7 +174,7 @@
     $$('.week-select').forEach(sel => sel.innerHTML = weekOptions());
     const sbp = $('#sbProgress');
     if (sbp) sbp.innerHTML =
-      '<div class="sbp-top"><span>Week progress</span><span><b id="sbDone">0</b>/<span id="sbTotal">0</span> <span class="sbp-pct" id="sbPct">0%</span></span></div>' +
+      '<div class="sbp-top"><span>' + (WEEK === PLAN_WEEK ? 'Plan progress' : 'Week progress') + '</span><span><b id="sbDone">0</b>/<span id="sbTotal">0</span> <span class="sbp-pct" id="sbPct">0%</span></span></div>' +
       '<div class="sbp-track"><span class="sbp-fill" id="sbFill"></span></div>' +
       '<div class="sbp-time"><span id="sbTime"></span> <span class="sbp-sync" id="sbSync"></span></div>' +
       '<div class="sbp-actions"><button class="btn primary sm" id="sbNext">↓ Next unchecked</button><button class="btn sm" id="sbReset">Reset</button></div>';
@@ -158,7 +184,7 @@
     const hero = $('#hero');
     if (hero) hero.innerHTML =
       '<div class="hero-top"><div class="hero-week"><select class="week-select" data-week-switch aria-label="Switch week">' + weekOptions() + '</select><span class="hero-dash">Francis Roberts Study Dashboard</span></div>' +
-      '<div class="hero-eyebrow">Week ' + String(WEEK).padStart(2, '0') + '</div></div>' +
+      '<div class="hero-eyebrow">' + (WEEK === PLAN_WEEK ? 'Finish Plan' : 'Week ' + String(WEEK).padStart(2, '0')) + '</div></div>' +
       '<h1 class="hero-title">' + esc(meta.title) + '</h1>' +
       '<p class="hero-sub">' + esc(SUB) + ' · ' + esc(meta.range) + '</p>' +
       '<div class="pill-row">' +
@@ -396,7 +422,7 @@
     set('sbDone', done); set('sbTotal', total); set('sbPct', pct + '%'); wid('sbFill', pct + '%'); colorProgressBar('sbFill', 'sbPct', pct);
     set('sbTime', pct === 100 ? 'All done · ' + fmtDur(totalMin) + ' total' : '≈ ' + fmtDur(remain) + ' left');
     set('pillProgText', done + ' of ' + total + ' done'); wid('pillProgFill', pct + '%');
-    set('pillEffort', '⏱ ~' + fmtDur(totalMin) + ' this week');
+    set('pillEffort', '⏱ ~' + fmtDur(totalMin) + (WEEK === PLAN_WEEK ? ' on this plan' : ' this week'));
     set('pillRemain', remain ? '⏳ ~' + fmtDur(remain) + ' left' : '✅ All done');
     const nx = req.find(i => !CHECKED.has(i.id));
     set('pillNextText', nx ? nx.label.replace(/ —.*$/, '') : 'All done 🎉');
@@ -415,12 +441,18 @@
   async function sbUpsert(id, checked) {
     try { const r = await fetch(SB_URL + '/rest/v1/' + SB_TABLE + '?on_conflict=id', { method: 'POST', headers: Object.assign({}, SB_HEADERS, { 'Prefer': 'resolution=merge-duplicates,return=minimal' }), body: JSON.stringify({ id, checked, updated_at: new Date().toISOString() }) }); return r.ok; } catch (e) { return false; }
   }
-  async function sbLoadWeek() { try { const r = await fetch(SB_URL + '/rest/v1/' + SB_TABLE + '?select=id,checked&id=like.w' + WEEK + '-*', { headers: SB_HEADERS }); return r.ok ? await r.json() : null; } catch (e) { return null; } }
+  // Fetch exactly this page's ids. (Was a `like.w<WEEK>-*` prefix match, which couples state
+  // to the id naming scheme and can't express a page whose items span several weeks.)
+  async function sbLoadItems() {
+    const ids = ITEMS.map(i => encodeURIComponent(i.id)).join(',');
+    if (!ids) return [];
+    try { const r = await fetch(SB_URL + '/rest/v1/' + SB_TABLE + '?select=id,checked&id=in.(' + ids + ')', { headers: SB_HEADERS }); return r.ok ? await r.json() : null; } catch (e) { return null; }
+  }
   async function sbResetWeek() { try { const rows = ITEMS.map(i => ({ id: i.id, checked: false, updated_at: new Date().toISOString() })); const r = await fetch(SB_URL + '/rest/v1/' + SB_TABLE + '?on_conflict=id', { method: 'POST', headers: Object.assign({}, SB_HEADERS, { 'Prefer': 'resolution=merge-duplicates,return=minimal' }), body: JSON.stringify(rows) }); return r.ok; } catch (e) { return false; } }
   function hydrateLocal() { ITEMS.forEach(i => { if (lsGet(i.id) === '1') CHECKED.add(i.id); }); }
   async function loadRemote() {
     if (!SB_ON) return;
-    const rows = await sbLoadWeek(); if (!rows) { setSync('err'); return; }
+    const rows = await sbLoadItems(); if (!rows) { setSync('err'); return; }
     let changed = false;
     rows.forEach(({ id, checked }) => { if (!ITEMS.some(i => i.id === id)) return; const had = CHECKED.has(id); if (checked && !had) { CHECKED.add(id); changed = true; } if (!checked && had) { CHECKED.delete(id); changed = true; } lsSet(id, checked ? '1' : '0'); });
     if (changed) renderChecklist(); setSync('ok');
@@ -438,7 +470,10 @@
     } catch (e) {}
   }
   function resetWeek() {
-    if (!confirm('Reset your progress for Week ' + WEEK + '?')) return;
+    const ask = WEEK === PLAN_WEEK
+      ? 'Reset the Finish Plan? This also unchecks the shared Week 4 and Week 5 items.'
+      : 'Reset your progress for Week ' + WEEK + '?';
+    if (!confirm(ask)) return;
     ITEMS.forEach(i => { CHECKED.delete(i.id); lsSet(i.id, '0'); });
     renderChecklist(); closeDrawer();
     if (SB_ON) { setSync('saving'); sbResetWeek().then(ok => setSync(ok ? 'ok' : 'err')); }
@@ -455,7 +490,7 @@
   /* ── Celebration ────────────────────────────────────────────────────────── */
   function celebrate() {
     const b = $('#banner');
-    if (b) { b.innerHTML = '<div class="bt">Week ' + WEEK + ' complete</div><div class="bs">Every item checked off. Nicely done.</div>'; b.classList.add('show'); setTimeout(() => b.classList.remove('show'), 4200); }
+    if (b) { b.innerHTML = '<div class="bt">' + (WEEK === PLAN_WEEK ? 'Finish Plan complete' : 'Week ' + WEEK + ' complete') + '</div><div class="bs">Every item checked off. Nicely done.</div>'; b.classList.add('show'); setTimeout(() => b.classList.remove('show'), 4200); }
     confetti();
   }
   function confetti() {
@@ -471,12 +506,12 @@
 
   /* -- HUB (index.html) -- */
   const HUB = new Set();
-  const WEEK_BOUNDS = { 1: ['2026-07-26','2026-08-01'], 2: ['2026-08-02','2026-08-08'], 3: ['2026-08-09','2026-08-15'], 4: ['2026-08-16','2026-08-22'], 5: ['2026-08-23','2026-08-29'] };
+  const WEEK_BOUNDS = { 1: ['2026-07-26','2026-08-01'], 2: ['2026-08-02','2026-08-08'], 3: ['2026-08-09','2026-08-15'], 4: ['2026-08-16','2026-08-22'], 5: ['2026-08-23','2026-08-29'], 6: ['2026-08-24','2026-08-27'] };
   const MILESTONE_SHORT = { 'w1-live1': 'Course Launch', 'w2-asg1': 'Private Writing', 'w3-live1': 'Live Discussion (Wk 3)', 'w5-live1': 'Live Discussion (Wk 5)', 'w5-asg1': 'Speech script', 'w5-asg2': 'Speech video' };
 
   function initHub() {
     buildHubChrome();
-    renderHubPinned(); renderHubSchedule(); renderHubWeeks();
+    renderHubPinned(); renderHubSchedule(); renderHubFinish(); renderHubWeeks();
     applyHidden(); applyOrder(); initDrag();
     loadHubRemote(); subscribeHubRealtime();
   }
@@ -560,6 +595,26 @@
     host.innerHTML = pwCard + spCard + fwCard;
   }
 
+  function planEntryIds() { return (window.COURSE.plan || []).reduce((a, g) => a.concat((g.entries || []).map(e => e.id)), []); }
+
+  function renderHubFinish() {
+    const host = $('#hubFinish'); if (!host) return;
+    const meta = window.COURSE.weeks[PLAN_WEEK]; if (!meta) return;
+    const ids = planEntryIds();
+    const done = ids.filter(id => HUB.has(id)).length;
+    const pct = ids.length ? Math.round(done / ids.length * 100) : 0;
+    const now = new Date(), b = WEEK_BOUNDS[PLAN_WEEK];
+    const cur = b && now >= parseDue(b[0]) && now < new Date(parseDue(b[1]).getTime() + DAY);
+    const status = pct === 100
+      ? '<span class="pin-check">\u2713 done</span>'
+      : '<span class="pin-count">' + (b ? esc(daysWord(parseDue(b[1]), now)) : '') + '</span>';
+    host.innerHTML = '<a class="pin-card pin-finish' + (cur ? ' current' : '') + (pct === 100 ? ' pin-done' : '') + '" href="finish.html">' +
+      '<div class="pin-top"><span class="pin-badge">\ud83c\udfc1 Finish Plan</span>' + status + '</div>' +
+      '<div class="pin-target">' + esc(meta.title) + '</div>' +
+      '<div class="wk-card-bar"><span style="width:' + pct + '%"></span></div>' +
+      '<div class="pin-real">' + done + ' / ' + ids.length + ' steps done \u00b7 ' + esc(meta.range) + '</div></a>';
+  }
+
   function renderHubWeeks() {
     const host = $('#hubWeeks'); if (!host) return;
     const today = new Date(); let html = '';
@@ -596,7 +651,7 @@
   }
 
   function updateHubProgress() {
-    const all = window.COURSE.items;
+    const all = window.COURSE.items.filter(i => i.week !== PLAN_WEEK);
     const total = all.length, done = all.filter(i => HUB.has(i.id)).length;
     const pct = total ? Math.round(done / total * 100) : 0;
     const remain = all.filter(i => !HUB.has(i.id)).reduce((a, i) => a + (i.effort || 0), 0);
@@ -614,7 +669,7 @@
     set('hubNext', up ? '\u23f3 ' + short + ' \u2014 ' + daysWord(parseDue(up.due), now) : '\u23f3 term complete');
   }
 
-  function hubApply() { updateHubProgress(); renderHubPinned(); renderHubWeeks(); renderHubSchedule(); }
+  function hubApply() { updateHubProgress(); renderHubPinned(); renderHubFinish(); renderHubWeeks(); renderHubSchedule(); }
   async function loadHubRemote() {
     window.COURSE.items.forEach(i => { if (lsGet(i.id) === '1') HUB.add(i.id); });
     hubApply();
